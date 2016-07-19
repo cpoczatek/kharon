@@ -8,7 +8,9 @@ Data that is made up of physical measurements is often created on a machine:
 - tied to an instrument physically
 - non-upgradeable because of the requirements of it's primary software
 
-These things can limit options available to automatically move data from the
+Some examples are: an RPi weather station gathering local data, a digital oscilloscope
+attached to an old laptop, a $4M mass spec run by a non-upgradeable Windows 7 box.
+These limitations can restrict methods to automatically move data from the
 machine of origin into a data processing pipeline.
 
 _Charon_ monitors the directory (or tree) where data is generated and sftp's "new"
@@ -18,14 +20,6 @@ files to a remote host if and only if:
 
 _Charon_ only requires Python and the Paramiko package which are available on
 Linux/OS X/Windows.
-
-#Current Problems
-_Charon_ should be considered sub-alpha quality. *_Use at your own risk!_*
-
-#Improvements, planned and possible
-- actually parse arguments
-- store file hashes?
-- other transport modes / endpoints? Eg S3 or dropbox?
 
 #How?
 
@@ -38,6 +32,16 @@ blah
 blah
 ```
 
+#Current Problems
+_Charon_ should be considered sub-alpha quality. *_Use at your own risk!_* It also
+flattens any directory structure of the source when copying to the remote host,
+which may be very stupid.
+
+#Improvements, planned and possible
+- actually parse arguments
+- store file hashes?
+- other transport modes / endpoints? Eg S3 or dropbox?
+
 #inFAQ
 
 _Q:_ Why not just use rsync?
@@ -47,7 +51,7 @@ about the *data* not where it's saved.
 
 _Q:_ Why not just use DropBox/Syncthing?
 _A:_ Bi-directional sync is *not* the goal. Syncing changes back to the original
-machine can useless to impossible.
+machine can be useless to impossible.
 
 _Q:_ You should have done XYZ!
 _A_: Probably.
