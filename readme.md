@@ -1,7 +1,11 @@
 
-_kharon ferries your files across the river Styx._
+_Kharon ferries your files across the river Styx._
 -----
-_kharon_ should be considered sub-alpha quality. *_Use at your own risk!_*
+![Kharon (Charon) etching](imgs/Charon-crop.png)
+
+_I must move the files... It is my fate..._
+
+#_Kharon_ should be considered sub-alpha quality. *_Use at your own risk!_*
 
 #What?
 Data that is made up of physical measurements is often created on a machine:
