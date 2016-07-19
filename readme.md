@@ -1,6 +1,7 @@
 
-_Charon ferries your files across the river Styx._
+_kharon ferries your files across the river Styx._
 -----
+_kharon_ should be considered sub-alpha quality. *_Use at your own risk!_*
 
 #What?
 Data that is made up of physical measurements is often created on a machine:
@@ -13,27 +14,27 @@ attached to an old laptop, a $4M mass spec run by a non-upgradeable Windows 7 bo
 These limitations can restrict methods to automatically move data from the
 machine of origin into a data processing pipeline.
 
-_Charon_ monitors the directory (or tree) where data is generated and sftp's "new"
+_Kharon_ monitors the directory (or tree) where data is generated and sftp's "new"
 files to a remote host if and only if:
 - that file doesn't exist at the remote location, _or any sub-directory_.
 - that file is no longer growing (note: kludge)
 
-_Charon_ only requires Python and the Paramiko package which are available on
+_Kharon_ only requires Python and the Paramiko package which are available on
 Linux/OS X/Windows.
 
 #How?
 
-_Charon_ is self-documenting:
+_kharon_ is self-documenting:
 
 ```
-cpoczatek@grepon:charon$ python charon.py --help
+cpoczatek@grepon:kharon$ python kharon.py --help
 blah
 blah
 blah
 ```
 
 #Current Problems
-_Charon_ should be considered sub-alpha quality. *_Use at your own risk!_* It also
+Again, _kharon_ should be considered sub-alpha quality. *_Use at your own risk!_* It also
 flattens any directory structure of the source when copying to the remote host,
 which may be very stupid.
 
