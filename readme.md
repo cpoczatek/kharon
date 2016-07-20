@@ -28,7 +28,7 @@ Linux/OS X/Windows.
 
 #How?
 
-_kharon_ is self-documenting:
+_kharon_ is going to be self-documenting:
 
 ```
 cpoczatek@grepon:kharon$ python kharon.py --help
@@ -36,6 +36,7 @@ blah
 blah
 blah
 ```
+But right now it's not. Edit kharon.py to set params.
 
 #Current Problems
 Again, _kharon_ should be considered sub-alpha quality. *_Use at your own risk!_* It also
