@@ -7,6 +7,7 @@ import hashlib
 import time
 import shutil
 import paramiko
+import argparse
 
 # todo:
 # options
@@ -32,6 +33,24 @@ hostname = 'buenosaires'
 username = 'mimsdata'
 sleeptime = 10
 changetime = 2
+
+def setupArgs():
+    parser = argparse.ArgumentParser(description='Watch for new data and sftp to remote host.')
+    required = parser.add_argument_group('required named arguments')
+    required.add_argument('--host', required=True, type=str,
+                          help='Name of remote host.')
+    required.add_argument('--dest', required=True, type=str,
+                          help='Destinatoin path on HOST')
+    required.add_argument('--user', required=True, type=str, help='username on HOST.')
+    required.add_argument('--password', required=True, type=str, help='Password for USER.')
+    parser.add_argument('--sleeptime', type=int, default=600,
+                        help='Wait in seconds between upload checks.')
+    parser.add_argument('--changetime', type=int, default=120,
+                        help='Wait in seconds to see if file is growing.')
+    parser.add_argument('--verbose',
+                        action='store_true',
+                        help='verbose flag, no-op right now' )
+    return parser
 
 # arguments are dicts keyed on absolute paths,
 # but the compare is by basename
@@ -108,22 +127,44 @@ def collectremotestats(sftpclient):
       files[abspath] = stat
   return files
 
+# Slash '/' is hardcoded because ftp always uses slash
+def mkRemoteDirs(sftp, inRemoteDir):
+    currentDir = '/'
+    for dirElement in inRemoteDir.split('/'):
+        if dirElement:
+            currentDir += dirElement + '/'
+            try:
+                sftp.mkdir(currentDir)
+            except:
+                pass # fail silently if remote directory already exists
 
 def main():
+    parser = setupArgs()
+    args = parser.parse_args()
+
+    localpath = os.getcwd()
+    remotepath = args.dest
+    hostname = args.host
+    sleeptime = args.sleeptime
+    changetime = args.changetime
+
     print "local path: ", localpath, "\tremote path: ", remotepath, \
           "\thost: ", hostname, "\tsleeptime: ", sleeptime, \
           "\tchangetime: ", changetime
 
+    username = args.user
+    password = args.password
     # ssh client
     ssh_client = paramiko.SSHClient()
     ssh_client.load_system_host_keys()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     print "Connect ", username, "@", hostname, ":", remotepath
-    ssh_client.connect(hostname=hostname, username=username, password="")
+    ssh_client.connect(hostname=hostname, username=username, password=password)
     print "\nOpen sftp connection... "
     sftp_client = ssh_client.open_sftp()
     sftp_client.chdir(remotepath)
-    print "Open."
+    print "Connection open."
+
     try:
         while True:
             localfiles = collectstats(localpath)
@@ -133,8 +174,8 @@ def main():
 
             new = newfiles(localfiles,remotefiles)
             print "New files:", sorted(new.keys())
-            if len(new) == 0:
-                continue
+            #if len(new) == 0:
+            #    continue
             # need to copy tree or something for dirs that don't exist in dest
             print "Check for file modifications... ", changetime, " sec"
             unmod = removechanging(localfiles, new, changetime).keys()
@@ -142,6 +183,7 @@ def main():
             for f in unmod:
                 print f, " --> ", remotepath
                 rpath = os.path.join(remotepath, os.path.basename(f))
+                #mkRemoteDirs(sftp_client, rpath)
                 sftp_client.put(f,rpath)
 
             # sleep for some time
