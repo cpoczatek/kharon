@@ -36,20 +36,20 @@ changetime = 2
 
 def setupArgs():
     parser = argparse.ArgumentParser(description='Watch for new data and sftp to remote host.')
-    required = parser.add_argument_group('required named arguments')
+    required = parser.add_argument_group('Required named arguments')
     required.add_argument('--host', required=True, type=str,
                           help='Name of remote host.')
     required.add_argument('--dest', required=True, type=str,
                           help='Destinatoin path on HOST')
-    required.add_argument('--user', required=True, type=str, help='username on HOST.')
+    required.add_argument('--user', required=True, type=str, help='Username on HOST.')
     required.add_argument('--password', required=True, type=str, help='Password for USER.')
     parser.add_argument('--sleeptime', type=int, default=600,
-                        help='Wait in seconds between upload checks.')
+                        help='Wait in seconds between upload checks, default 600.')
     parser.add_argument('--changetime', type=int, default=120,
-                        help='Wait in seconds to see if file is growing.')
+                        help='Wait in seconds to see if file is growing, default 120.')
     parser.add_argument('--verbose',
                         action='store_true',
-                        help='verbose flag, no-op right now' )
+                        help='Verbose flag, no-op right now' )
     return parser
 
 # arguments are dicts keyed on absolute paths,
@@ -182,7 +182,10 @@ def main():
             print "New and unmod files: ", unmod
             for f in unmod:
                 print f, " --> ", remotepath
-                rpath = os.path.join(remotepath, os.path.basename(f))
+                # Calling local os.path.joi when running on Windows gives bad
+                # path with mix of '/' and '\'. Intentionally use '/'.
+                # Quick hack
+                rpath = remotepath + '/' + os.path.basename(f)
                 #mkRemoteDirs(sftp_client, rpath)
                 sftp_client.put(f,rpath)
 
