@@ -28,13 +28,29 @@ Linux/OS X/Windows.
 
 #How?
 
-_kharon_ is going to be self-documenting:
+_kharon_ is self-documenting:
 
 ```
-cpoczatek@grepon:kharon$ python kharon.py --help
-blah
-blah
-blah
+cpoczatek@grepon:kharon$ python kharon.py -h
+usage: kharon.py [-h] --host HOST --dest DEST --user USER --password PASSWORD
+                 [--sleeptime SLEEPTIME] [--changetime CHANGETIME] [--verbose]
+
+Watch for new data and sftp to remote host.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --sleeptime SLEEPTIME
+                        Wait in seconds between upload checks.
+  --changetime CHANGETIME
+                        Wait in seconds to see if file is growing.
+  --verbose             verbose flag, no-op right now
+
+required named arguments:
+  --host HOST           Name of remote host.
+  --dest DEST           Destinatoin path on HOST
+  --user USER           username on HOST.
+  --password PASSWORD   Password for USER.
+
 ```
 But right now it's not. Edit kharon.py to set params.
 
