@@ -187,7 +187,11 @@ def main():
                 # Quick hack
                 rpath = remotepath + '/' + os.path.basename(f)
                 #mkRemoteDirs(sftp_client, rpath)
+                # Upload file and perserve mod/access times
                 sftp_client.put(f,rpath)
+                fStat = os.stat(f)
+                times = (fStat.st_atime, fStat.st_mtime)
+                sftp_client.utime(rpath, times)
 
             # sleep for some time
             print "sleeping ", sleeptime, " sec..."
