@@ -138,6 +138,11 @@ def mkRemoteDirs(sftp, inRemoteDir):
             except:
                 pass # fail silently if remote directory already exists
 
+def printTotals(transferred, toBeTransferred):
+    transKB = transferred/1000
+    tobeKB = toBeTransferred/1000
+    print "Transferred: {0} KB\tOut of: {1} KB".format(transKB, tobeKB)
+
 def main():
     parser = setupArgs()
     args = parser.parse_args()
@@ -188,7 +193,7 @@ def main():
                 rpath = remotepath + '/' + os.path.basename(f)
                 #mkRemoteDirs(sftp_client, rpath)
                 # Upload file and perserve mod/access times
-                sftp_client.put(f,rpath)
+                sftp_client.put(f,rpath,callback=printTotals)
                 fStat = os.stat(f)
                 times = (fStat.st_atime, fStat.st_mtime)
                 sftp_client.utime(rpath, times)
