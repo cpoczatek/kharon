@@ -143,6 +143,18 @@ def printTotals(transferred, toBeTransferred):
     tobeKB = toBeTransferred/1000
     print "Transferred: {0} KB\tOut of: {1} KB".format(transKB, tobeKB)
 
+def progress(count, total):
+    bar_len = 60
+    filled_len = int(round(bar_len * count / float(total)))
+
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+
+    sys.stdout.write('[%s] %s%s \r' % (bar, percents, '%'))
+    if percents == 100.0:
+        sys.stdout.write('\n')
+    sys.stdout.flush()  # As suggested by Rom Ruben
+
 def main():
     parser = setupArgs()
     args = parser.parse_args()
@@ -163,8 +175,13 @@ def main():
     ssh_client = paramiko.SSHClient()
     ssh_client.load_system_host_keys()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    print "Connect ", username, "@", hostname, ":", remotepath
-    ssh_client.connect(hostname=hostname, username=username, password=password)
+    try:
+        print "Connect ", username, "@", hostname, ":", remotepath
+        ssh_client.connect(hostname=hostname, username=username, password=password)
+    except Exception as error:
+        print "Unable to connect to {username}@{hostname}."
+        print(error)
+        exit()
     print "\nOpen sftp connection... "
     sftp_client = ssh_client.open_sftp()
     sftp_client.chdir(remotepath)
@@ -193,13 +210,13 @@ def main():
                 rpath = remotepath + '/' + os.path.basename(f)
                 #mkRemoteDirs(sftp_client, rpath)
                 # Upload file and perserve mod/access times
-                sftp_client.put(f,rpath,callback=printTotals)
+                sftp_client.put(f,rpath,callback=progress)
                 fStat = os.stat(f)
                 times = (fStat.st_atime, fStat.st_mtime)
                 sftp_client.utime(rpath, times)
 
             # sleep for some time
-            print "sleeping ", sleeptime, " sec..."
+            print "\nSleeping ", sleeptime, " sec..."
             time.sleep(sleeptime)
     except Exception as error:
         print "Unexpected error:"
