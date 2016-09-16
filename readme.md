@@ -52,6 +52,10 @@ required named arguments:
   --password PASSWORD   Password for USER.
 
 ```
+#Install
+- On linux just: `curl https://raw.githubusercontent.com/cpoczatek/kharon/master/setup.sh | bash` to install dependencies.
+- Otherwise install [paramiko](http://www.paramiko.org/) by hand
+- Download kharon.py
 
 #Current Problems
 Again, _kharon_ should be considered sub-alpha quality. *_Use at your own risk!_* It also
