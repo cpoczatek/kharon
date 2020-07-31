@@ -5,9 +5,9 @@ _Kharon ferries your files across the river Styx._
 
 _I must move the files... It is my fate..._
 
-#_Kharon_ should be considered sub-alpha quality. *_Use at your own risk!_*
+# _Kharon_ should be considered sub-alpha quality. *_Use at your own risk!_*
 
-#What?
+# What?
 Data that is made up of physical measurements is often created on a machine:
 - that's simple, underpowered, or has little storage, eg an old laptop or a RaspberryPi
 - tied to an instrument physically
@@ -26,7 +26,7 @@ files to a remote host if and only if:
 _Kharon_ only requires Python and the Paramiko package which are available on
 Linux/OS X/Windows.
 
-#How?
+# How?
 
 _kharon_ is self-documenting:
 
@@ -52,31 +52,34 @@ required named arguments:
   --password PASSWORD   Password for USER.
 
 ```
-#Install
+# Install
 - On linux just: `curl https://raw.githubusercontent.com/cpoczatek/kharon/master/setup.sh | bash` to install dependencies.
 - Otherwise install [paramiko](http://www.paramiko.org/) by hand
 - Download kharon.py
 
-#Current Problems
+# Current Problems
 Again, _kharon_ should be considered sub-alpha quality. *_Use at your own risk!_* It also
 flattens any directory structure of the source when copying to the remote host,
 which may be very stupid.
 
-#Improvements, planned and possible
+# Improvements, planned and possible
 - actually parse arguments
 - store file hashes?
 - other transport modes / endpoints? Eg S3 or dropbox?
 
-#inFAQ
+# inFAQ
 
 _Q:_ Why not just use rsync?
+
 _A:_ Syncing the directory structure is undesirable when the software generating
 the raw data restricts that directory structure. This happens quite often. We care
 about the *data* not where it's saved.
 
 _Q:_ Why not just use DropBox/Syncthing?
+
 _A:_ Bi-directional sync is *not* the goal. Syncing changes back to the original
 machine can be useless to impossible.
 
 _Q:_ You should have done XYZ!
+
 _A_: Probably.
